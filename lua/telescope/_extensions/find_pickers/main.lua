@@ -4,6 +4,7 @@ local conf = require("telescope.config").values
 local finders = require("telescope.finders")
 local actions_state = require("telescope.actions.state")
 local actions = require("telescope.actions")
+local themes = require("telescope.themes")
 -- telescope-project modules
 
 local M = {}
@@ -19,6 +20,8 @@ M.setup = function(setup_config) end
 
 -- This creates a picker with a list of all of the pickers
 M.find_pickers = function(opts)
+	opts = opts or themes.get_dropdown()
+
 	pickers.new(opts or {}, {
 		prompt_title = "Find Pickers",
 		results_title = "Picker",
