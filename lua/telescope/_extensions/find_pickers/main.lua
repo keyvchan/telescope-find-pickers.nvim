@@ -34,7 +34,7 @@ M.find_pickers = function(opts)
 				local value = selection.value
 
 				-- TODO: Initial mode doesn't do anything, don't know why either
-				vim.api.nvim_command(":Telescope " .. value .. " " .. "initial_mode=insert")
+				vim.api.nvim_command("Telescope " .. value .. " " .. "initial_mode=insert")
 			end)
 			return true
 		end,
