@@ -11,8 +11,13 @@ local M = {}
 
 -- Variables that setup can change
 local result_table = {}
-local items = vim.fn.getcompletion("Telescope ", "cmdline")
-for i, item in ipairs(items) do
+local builtin_list = vim.tbl_keys(require("telescope.builtin"))
+local extensions_list = vim.tbl_keys(require("telescope._extensions").manager)
+
+for i, item in ipairs(builtin_list) do
+	table.insert(result_table, i, item)
+end
+for i, item in ipairs(extensions_list) do
 	table.insert(result_table, i, item)
 end
 
