@@ -24,10 +24,8 @@ for i, item in ipairs(extensions_list) do
 	table.insert(result_table, i, item)
 end
 
--- use % get current buffer
-local current_bufnr = vim.fn.bufnr("%")
--- use # get last accessed window
-local current_winnr = vim.fn.winnr("#")
+local current_bufnr = vim.api.nvim_get_current_buf()
+local current_winnr = vim.api.nvim_get_current_win()
 
 M.setup = function(setup_config) end
 
