@@ -21,6 +21,9 @@ for i, item in ipairs(extensions_list) do
 	table.insert(result_table, i, item)
 end
 
+local bufnr = vim.fn.bufnr("%")
+local winnr = vim.fn.winnr("#")
+
 M.setup = function(setup_config) end
 
 -- This creates a picker with a list of all of the pickers
@@ -37,9 +40,15 @@ M.find_pickers = function(opts)
 			actions.select_default:replace(function()
 				local selection = actions_state.get_selected_entry()
 				local value = selection.value
+				vim.notify(vim.inspect(bufnr))
+				vim.notify(vim.inspect(winnr))
 
 				-- TODO: Initial mode doesn't do anything, don't know why either
-				vim.api.nvim_command("Telescope " .. value .. " " .. "initial_mode=insert")
+				require("telescope.builtin")[value]({
+					bufnr = bufnr,
+					winnr = winnr,
+				})
+				-- vim.api.nvim_command("Telescope " .. value .. " " .. "initial_mode=insert")
 			end)
 			return true
 		end,
