@@ -48,9 +48,9 @@ M.find_pickers = function(opts)
 				local value = selection.value
 
 				if builtin_pickers[value] ~= nil then
-					builtin_pickers[value](opts)
+					builtin_pickers[value]()
 				elseif extensions_pickers.manager[value] ~= nil then
-					extensions_pickers.manager[value][value](opts)
+					extensions_pickers.manager[value][value]()
 				end
 			end)
 			return true
