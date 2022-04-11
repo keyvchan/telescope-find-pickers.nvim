@@ -18,7 +18,7 @@ use({
 
 -- load it in your config
 -- make sure load it as the last one
-require('telescope').load_extension('find-pickers')
+require('telescope').load_extension('find_pickers')
 ```
 
 ## Config
