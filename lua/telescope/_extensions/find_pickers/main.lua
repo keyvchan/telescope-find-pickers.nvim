@@ -46,6 +46,7 @@ M.find_pickers = function(opts)
 				local selection = actions_state.get_selected_entry()
 				local value = selection.value
 
+				actions._close(prompt_bufnr)
 				if builtin_pickers[value] ~= nil then
 					builtin_pickers[value](opts_pickers)
 				elseif extensions_pickers.manager[value] ~= nil then
