@@ -12,18 +12,6 @@ local extensions_pickers = require("telescope._extensions")
 
 local M = {}
 
--- Variables that setup can change
-local result_table = {}
-local builtin_list = vim.tbl_keys(builtin_pickers)
-local extensions_list = vim.tbl_keys(extensions_pickers.manager)
-
-for i, item in ipairs(builtin_list) do
-	table.insert(result_table, i, item)
-end
-for i, item in ipairs(extensions_list) do
-	table.insert(result_table, i, item)
-end
-
 M.setup = function(setup_config) end
 
 -- This creates a picker with a list of all of the pickers
@@ -34,6 +22,18 @@ M.find_pickers = function(opts)
 		bufnr = vim.api.nvim_get_current_buf(),
 		winnr = vim.api.nvim_get_current_win(),
 	}
+
+	-- Variables that setup can change
+	local result_table = {}
+	local builtin_list = vim.tbl_keys(builtin_pickers)
+	local extensions_list = vim.tbl_keys(extensions_pickers.manager)
+
+	for i, item in ipairs(builtin_list) do
+		table.insert(result_table, i, item)
+	end
+	for i, item in ipairs(extensions_list) do
+		table.insert(result_table, i, item)
+	end
 
 	pickers.new(opts_find_pickers or {}, {
 		prompt_title = "Find Pickers",
