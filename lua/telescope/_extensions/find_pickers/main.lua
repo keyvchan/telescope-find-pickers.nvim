@@ -66,8 +66,27 @@ M.find_pickers = function(opts)
 						actions.close(prompt_bufnr)
 						extensions_pickers.manager[value](opts_pickers)
 					else
+						local results_table = vim.tbl_keys(extensions_pickers.manager[value])
+						local final_results = {}
+						for i, item in ipairs(results_table) do
+							-- vim.notify(vim.inspect(item == "_picker"))
+							if item ~= "_picker" then
+								if item ~= "finder" then
+									if item ~= "actions" then
+										-- vim.notify("insert")
+										table.insert(final_results, item)
+									end
+								end
+							end
+						end
+						if vim.tbl_count(final_results) == 1 then
+							actions.close(prompt_bufnr)
+							extensions_pickers.manager[final_results[1]][final_results[1]](opts_pickers)
+							return
+						end
+
 						local finder = finders.new_table({
-							results = vim.tbl_keys(extensions_pickers.manager[value]),
+							results = final_results,
 						})
 						sub_pickers = extensions_pickers.manager[value]
 						current_picker:refresh(finder, { reset_prompt = true })
