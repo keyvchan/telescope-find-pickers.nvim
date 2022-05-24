@@ -13,6 +13,7 @@ local extensions_pickers = require("telescope._extensions")
 local M = {}
 
 M.setup = function(setup_config) end
+local sub_pickers = {}
 
 -- This creates a picker with a list of all of the pickers
 M.find_pickers = function(opts)
@@ -45,12 +46,51 @@ M.find_pickers = function(opts)
 			actions.select_default:replace(function()
 				local selection = actions_state.get_selected_entry()
 				local value = selection.value
+				local current_picker = actions_state.get_current_picker(prompt_bufnr)
 
-				actions.close(prompt_bufnr)
+				if vim.tbl_isempty(sub_pickers) == false then
+					actions.close(prompt_bufnr)
+					sub_pickers[value](opts_pickers)
+					sub_pickers = {}
+					return
+				end
+
 				if builtin_pickers[value] ~= nil then
+					actions.close(prompt_bufnr)
 					builtin_pickers[value](opts_pickers)
-				elseif extensions_pickers.manager[value] ~= nil then
-					extensions_pickers.manager[value][value](opts_pickers)
+					return
+				end
+				if extensions_pickers.manager[value] ~= nil then
+					-- check table or function
+					if type(extensions_pickers.manager[value]) == "function" then
+						actions.close(prompt_bufnr)
+						extensions_pickers.manager[value](opts_pickers)
+					else
+						local results_table = vim.tbl_keys(extensions_pickers.manager[value])
+						local final_results = {}
+						for i, item in ipairs(results_table) do
+							-- vim.notify(vim.inspect(item == "_picker"))
+							if item ~= "_picker" then
+								if item ~= "finder" then
+									if item ~= "actions" then
+										-- vim.notify("insert")
+										table.insert(final_results, item)
+									end
+								end
+							end
+						end
+						if vim.tbl_count(final_results) == 1 then
+							actions.close(prompt_bufnr)
+							extensions_pickers.manager[final_results[1]][final_results[1]](opts_pickers)
+							return
+						end
+
+						local finder = finders.new_table({
+							results = final_results,
+						})
+						sub_pickers = extensions_pickers.manager[value]
+						current_picker:refresh(finder, { reset_prompt = true })
+					end
 				end
 			end)
 			return true
